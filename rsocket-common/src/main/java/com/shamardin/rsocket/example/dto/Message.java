@@ -1,4 +1,4 @@
-package com.shamardin.rsocket.example;
+package com.shamardin.rsocket.example.dto;
 
 import lombok.Builder;
 import lombok.Value;

@@ -1,4 +1,4 @@
 rootProject.name = 'rsocket-example'
+include 'rsocket-common'
 include 'rsocket-client'
 include 'rsocket-server'
-include 'rsocket-common'
