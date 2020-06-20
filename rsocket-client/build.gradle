@@ -1,16 +1,4 @@
-plugins {
-    id 'java'
-}
-
-group 'com.shamardin'
-version '0.0.1-SNAPSHOT'
-
-repositories {
-    mavenCentral()
-}
-
 dependencies {
-    compile project(':rsocket-common')
+    implementation project(':rsocket-common')
     implementation 'org.springframework.shell:spring-shell-starter:2.0.1.RELEASE'
-    testCompile group: 'junit', name: 'junit', version: '4.12'
 }
