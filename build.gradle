@@ -48,10 +48,16 @@ subprojects {
             exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
         }
         testImplementation 'io.projectreactor:reactor-test'
-        testCompile 'org.springframework.boot:spring-boot-starter-test'
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
     }
 
     test {
         useJUnitPlatform()
+    }
+
+}
+task bootJar() {
+    subprojects.each {subproject ->
+        dependsOn subproject.bootJar
     }
 }
