@@ -19,13 +19,11 @@ import java.util.UUID;
 @ShellComponent
 public class RSocketClient {
     private final RSocketRequester rsocketRequester;
-    private final String clientId;
+    private final String clientId = UUID.randomUUID().toString();
 
     @Autowired
     public RSocketClient(RSocketRequester.Builder rsocketRequesterBuilder, RSocketStrategies strategies) {
-        clientId = UUID.randomUUID().toString();
         log.info("Connecting using client ID: {}", clientId);
-
         SocketAcceptor responder = RSocketMessageHandler.responder(strategies, new ClientHandler());
 
         this.rsocketRequester = rsocketRequesterBuilder

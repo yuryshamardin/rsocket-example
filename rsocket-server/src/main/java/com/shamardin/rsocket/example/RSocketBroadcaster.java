@@ -53,12 +53,12 @@ public class RSocketBroadcaster {
     }
 
     private void sendData(Map.Entry<String, RSocketRequester> client, byte[] data) {
-        log.info("Sent to client " + client.getKey());
+        log.info("Sent to client {}", client.getKey());
         client.getValue().route("receive-data")
                 .data(data)
                 .retrieveMono(String.class)
                 .subscribe(response ->
-                        log.info("Client {} got the data. Response was: [{}]", client.getKey(), response));
+                        log.info("Client {} got the data. Response is: [{}]", client.getKey(), response));
 
     }
 }
