@@ -14,4 +14,3 @@ dependencies {
     implementation 'org.springframework.shell:spring-shell-starter:2.0.1.RELEASE'
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
-lombok.config

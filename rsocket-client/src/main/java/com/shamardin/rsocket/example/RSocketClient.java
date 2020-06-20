@@ -3,18 +3,15 @@ package com.shamardin.rsocket.example;
 import io.rsocket.SocketAcceptor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.rsocket.RSocketRequester;
 import org.springframework.messaging.rsocket.RSocketStrategies;
 import org.springframework.messaging.rsocket.annotation.support.RSocketMessageHandler;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+import org.springframework.shell.standard.ShellOption;
 
 import javax.annotation.PreDestroy;
 import java.net.URI;
-import java.time.Duration;
 import java.util.UUID;
 
 @Slf4j
@@ -50,32 +47,16 @@ public class RSocketClient {
         rsocketRequester.rsocket().dispose();
     }
 
-    @ShellMethod("Send one request. One response will be printed. request-response")
-    public void requestResponse() {
-        log.info("\nSending one request. Waiting for one response...");
-        final byte[] usefulData = "some message".getBytes();
+    @ShellMethod("Send one request for broadcasting. Just type broadcast \"message for broadcasting\" ")
+    public void broadcast(@ShellOption String text) {
+        log.info("Sending one request. Waiting for one response...");
+        final byte[] usefulData = text.getBytes();
         final Message message = Message.builder().data(usefulData).clientId(clientId).build();
         this.rsocketRequester
                 .route("broadcast")
                 .data(message)
                 .send()
                 .block();
-        log.info("\nSent!");
-    }
-}
-
-@Slf4j
-class ClientHandler {
-    @MessageMapping("client-example-data")
-    public Flux<String> statusUpdate(String status) {
-        log.info("\nConnection {}", status);
-        return Flux.interval(Duration.ofSeconds(5)).map(index -> String.format("Free memory %s",
-                Runtime.getRuntime().freeMemory()));
-    }
-
-    @MessageMapping("receive-data")
-    public Mono<String> getData(byte[] data) {
-        log.info("\nI've got data!" + new String(data));
-        return Mono.just(String.format("I've got %d bytes", data.length));
+        log.info("Sent!");
     }
 }

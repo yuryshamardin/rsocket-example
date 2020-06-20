@@ -26,7 +26,7 @@ public class RSocketBroadcaster {
     }
 
     @ConnectMapping("connecting")
-    void connectShellClientAndAskForTelemetry(RSocketRequester requester, @Payload String clientId) {
+    void connect(RSocketRequester requester, @Payload String clientId) {
         requester.rsocket()
                 .onClose()
                 .doFirst(() -> {
@@ -47,17 +47,17 @@ public class RSocketBroadcaster {
     public void broadcast(Message message) {
         log.info("Starting broadcasting");
         clients.entrySet().stream()
-                .filter(entry -> entry.getKey().equals(message.getClientId()))
+                .filter(entry -> !entry.getKey().equals(message.getClientId()))
                 .forEach(client -> sendData(client, message.getData()));
     }
 
     private void sendData(Map.Entry<String, RSocketRequester> client, byte[] data) {
-        log.info("\nSent to client " + client);
+        log.info("Sent to client " + client.getKey());
         client.getValue().route("receive-data")
                 .data(data)
                 .retrieveMono(String.class)
                 .subscribe(response ->
-                        log.info("Client {} got the data. Response was: {}", client.getKey(), response));
+                        log.info("Client {} got the data. Response was: [{}]", client.getKey(), response));
 
     }
 }
